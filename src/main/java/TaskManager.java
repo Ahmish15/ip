@@ -36,5 +36,4 @@ public class TaskManager {
             System.out.println((i + 1) + ". " + status(i) + " " + tasks[i].getDescription());
         }
     }
-
 }
