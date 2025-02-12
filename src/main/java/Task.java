@@ -18,8 +18,8 @@ public class Task {
         return isDone;
     }
 
-    public void setIsDone(boolean isDone) {
-        this.isDone = isDone;
+    public void setIsDone(boolean IsDone) {
+        this.isDone = IsDone;
     }
 
     public String status(){

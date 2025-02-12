@@ -15,7 +15,7 @@ public class TaskManager {
 
     public void mark(int index) {
         tasks[index].setIsDone(true);
-       System.out.println("Nice! I've marked this task as done:\n" + tasks[index].toString());
+        System.out.println("Nice! I've marked this task as done:\n" + tasks[index].toString());
     }
 
     public void unmark(int index) {
