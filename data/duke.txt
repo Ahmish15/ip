@@ -1,0 +1,6 @@
+T | 1 | m
+T | 0 | j
+T | 0 | k
+T | 0 | wank
+D | 0 | gonn | tmr
+E | 0 | read | 2pm
