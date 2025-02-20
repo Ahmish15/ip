@@ -29,4 +29,21 @@ public class TaskManager {
             System.out.println((i + 1) + "." + tasks[i].toString());
         }
     }
+
+    public void deleteTask(int index) {
+
+        // Print the task that’s being deleted
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + tasks[index].toString());
+
+        // Shift tasks left by one
+        for (int i = index; i < taskCount - 1; i++) {
+            tasks[i] = tasks[i + 1];
+        }
+        // Clear the last element and decrement count
+        tasks[taskCount - 1] = null;
+        taskCount--;
+
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
+    }
 }

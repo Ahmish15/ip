@@ -63,8 +63,10 @@ public class chatbot {
                     taskManager.addTask(event);
                 } else if (input.startsWith("list")) {
                     taskManager.listTask();
+                } else if (input.startsWith("delete")) {
+                    int index = Integer.parseInt(input.substring(7)) - 1;
+                    taskManager.deleteTask(index);
                 }
-
             } catch (TodoEmptyException e) {
 
             } catch (DeadlineFormatException e) {
