@@ -99,7 +99,7 @@ public class TaskManager {
             return "D | " + doneBit + " | " + d.getDescription() + " | " + d.getBy();
         } else if (t instanceof Event) {
             Event e = (Event) t;
-            return "E | " + doneBit + " | " + e.getDescription() + " | " + e.getFrom();
+            return "E | " + doneBit + " | " + e.getDescription() + " | " + e.getFrom() + " - " + e.getTo();
         } else {
             return "T | " + doneBit + " | " + t.getDescription();
         }

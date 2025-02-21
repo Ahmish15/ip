@@ -66,6 +66,8 @@ public class chatbot {
                 } else if (input.startsWith("delete")) {
                     int index = Integer.parseInt(input.substring(7)) - 1;
                     taskManager.deleteTask(index);
+                } else{
+                    System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
             } catch (TodoEmptyException e) {
 
