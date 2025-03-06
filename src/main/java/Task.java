@@ -22,11 +22,8 @@ public class Task {
         return isDone ? "[X]" : "[ ]";
     }
 
+    @Override
     public String toString() {
         return status() + " " + description;
     }
 }
-
-
-
-

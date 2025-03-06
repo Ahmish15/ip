@@ -19,7 +19,6 @@ public class chatbot {
             } catch (TodoEmptyException
                      | DeadlineFormatException
                      | EventFormatException e) {
-                // These exceptions already print their own messages
             } catch (NumberFormatException e) {
                 ui.showError("Please enter a valid task number!");
             } catch (Exception e) {

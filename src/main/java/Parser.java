@@ -52,6 +52,9 @@ public class Parser {
             }
             Event e = new Event(description, from, to);
             tasks.addTask(e);
+        } else if (input.startsWith("find ")) {
+            String keyword = input.substring(5).trim();
+            tasks.find(keyword);
         } else {
             ui.showError("I'm sorry, I don't understand that command.");
         }
@@ -67,6 +70,7 @@ public class Parser {
         String type = parts[0];
         boolean isDone = parts[1].equals("1");
         String description = parts[2];
+
         switch (type) {
             case "T":
                 Todo todo = new Todo(description);
