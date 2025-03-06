@@ -23,7 +23,10 @@ public class Storage {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if (!line.trim().isEmpty()) {
-                    tasks.addFromLoad(Parser.parseTaskLine(line));
+                    Task t = Parser.parseTaskLine(line);
+                    if (t != null) {
+                        tasks.addFromLoad(t);
+                    }
                 }
             }
             scanner.close();

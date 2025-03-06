@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Parser {
     public static boolean handleCommand(String input, TaskList tasks, Ui ui, Storage storage)
             throws TodoEmptyException, DeadlineFormatException, EventFormatException {
@@ -30,10 +33,12 @@ public class Parser {
                 throw new DeadlineFormatException();
             }
             String description = parts[0].trim();
-            String by = parts[1].trim();
-            if (description.isEmpty() || by.isEmpty()) {
+            String dateTimeStr = parts[1].trim();
+            if (description.isEmpty() || dateTimeStr.isEmpty()) {
                 throw new DeadlineFormatException();
             }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            LocalDateTime by = LocalDateTime.parse(dateTimeStr, formatter);
             Deadline d = new Deadline(description, by);
             tasks.addTask(d);
         } else if (input.startsWith("event")) {
@@ -45,11 +50,14 @@ public class Parser {
                 throw new EventFormatException();
             }
             String description = parts[0].trim();
-            String from = parts[1].trim();
-            String to = parts[2].trim();
-            if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
+            String fromStr = parts[1].trim();
+            String toStr = parts[2].trim();
+            if (description.isEmpty() || fromStr.isEmpty() || toStr.isEmpty()) {
                 throw new EventFormatException();
             }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            LocalDateTime from = LocalDateTime.parse(fromStr, formatter);
+            LocalDateTime to = LocalDateTime.parse(toStr, formatter);
             Event e = new Event(description, from, to);
             tasks.addTask(e);
         } else {
@@ -67,19 +75,22 @@ public class Parser {
         String type = parts[0];
         boolean isDone = parts[1].equals("1");
         String description = parts[2];
+
         switch (type) {
             case "T":
                 Todo todo = new Todo(description);
                 todo.setIsDone(isDone);
                 return todo;
             case "D":
-                String by = parts[3];
+                DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+                LocalDateTime by = LocalDateTime.parse(parts[3], formatterD);
                 Deadline d = new Deadline(description, by);
                 d.setIsDone(isDone);
                 return d;
             case "E":
-                String from = parts[3];
-                String to = parts[4];
+                DateTimeFormatter formatterE = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+                LocalDateTime from = LocalDateTime.parse(parts[3], formatterE);
+                LocalDateTime to = LocalDateTime.parse(parts[4], formatterE);
                 Event e = new Event(description, from, to);
                 e.setIsDone(isDone);
                 return e;
@@ -94,10 +105,15 @@ public class Parser {
             return "T | " + doneBit + " | " + t.getDescription();
         } else if (t instanceof Deadline) {
             Deadline d = (Deadline) t;
-            return "D | " + doneBit + " | " + d.getDescription() + " | " + d.getBy();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            String dateTimeStr = d.getBy().format(formatter);
+            return "D | " + doneBit + " | " + d.getDescription() + " | " + dateTimeStr;
         } else if (t instanceof Event) {
             Event e = (Event) t;
-            return "E | " + doneBit + " | " + e.getDescription() + " | " + e.getFrom() + " | " + e.getTo();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+            String fromStr = e.getFrom().format(formatter);
+            String toStr = e.getTo().format(formatter);
+            return "E | " + doneBit + " | " + e.getDescription() + " | " + fromStr + " | " + toStr;
         } else {
             return "T | " + doneBit + " | " + t.getDescription();
         }
