@@ -8,10 +8,8 @@ public class TaskList {
     }
 
     public void addFromLoad(Task t) {
-        if (t != null) {
-            tasks[size] = t;
-            size++;
-        }
+        tasks[size] = t;
+        size++;
     }
 
     public void addTask(Task t) {
@@ -21,11 +19,19 @@ public class TaskList {
     }
 
     public void mark(int index) {
+        if (index < 0 || index >= size) {
+            System.out.println("No task at that index to mark!");
+            return;
+        }
         tasks[index].setIsDone(true);
         System.out.println("Nice! I've marked this task as done:\n  " + tasks[index]);
     }
 
     public void unmark(int index) {
+        if (index < 0 || index >= size) {
+            System.out.println("No task at that index to unmark!");
+            return;
+        }
         tasks[index].setIsDone(false);
         System.out.println("OK, I've marked this task as not done yet:\n  " + tasks[index]);
     }
