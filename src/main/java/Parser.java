@@ -60,6 +60,9 @@ public class Parser {
             LocalDateTime to = LocalDateTime.parse(toStr, formatter);
             Event e = new Event(description, from, to);
             tasks.addTask(e);
+        } else if (input.startsWith("find ")) {
+            String keyword = input.substring(5).trim();
+            tasks.find(keyword);
         } else {
             ui.showError("I'm sorry, I don't understand that command.");
         }
