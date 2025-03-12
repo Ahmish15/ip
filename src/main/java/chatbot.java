@@ -8,7 +8,7 @@ public class chatbot {
     private TaskList tasks;
 
     /**
-     * Creates a Duke instance with the specified data file path.
+     * Creates a chatbot instance with the specified data file path.
      *
      * @param filePath The path to the storage file.
      */
@@ -42,7 +42,7 @@ public class chatbot {
     }
 
     /**
-     * The main method. Creates a new Duke instance and runs it.
+     * The main method. Creates a new chatbot instance and runs it.
      *
      * @param args Command-line arguments (unused).
      */

@@ -1,17 +1,17 @@
+import java.util.ArrayList;
+
 /**
- * Manages an array of Task objects and provides operations
+ * Manages a list of Task objects and provides operations
  * such as add, delete, mark, unmark, list, and find.
  */
 public class TaskList {
-    private Task[] tasks;
-    private int size;
+    private ArrayList<Task> tasks;
 
     /**
-     * Constructs an empty TaskList with capacity 100.
+     * Constructs an empty TaskList using an ArrayList.
      */
     public TaskList() {
-        tasks = new Task[100];
-        size = 0;
+        tasks = new ArrayList<>();
     }
 
     /**
@@ -20,8 +20,7 @@ public class TaskList {
      * @param t The task to add.
      */
     public void addFromLoad(Task t) {
-        tasks[size] = t;
-        size++;
+        tasks.add(t);
     }
 
     /**
@@ -30,8 +29,7 @@ public class TaskList {
      * @param t The task to add.
      */
     public void addTask(Task t) {
-        tasks[size] = t;
-        size++;
+        tasks.add(t);
         System.out.println("Got it. I've added this task:\n  " + t);
     }
 
@@ -41,12 +39,12 @@ public class TaskList {
      * @param index The zero-based index of the task to mark.
      */
     public void mark(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= tasks.size()) {
             System.out.println("No task at that index to mark!");
             return;
         }
-        tasks[index].setIsDone(true);
-        System.out.println("Nice! I've marked this task as done:\n  " + tasks[index]);
+        tasks.get(index).setIsDone(true);
+        System.out.println("Nice! I've marked this task as done:\n  " + tasks.get(index));
     }
 
     /**
@@ -55,31 +53,27 @@ public class TaskList {
      * @param index The zero-based index of the task to unmark.
      */
     public void unmark(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= tasks.size()) {
             System.out.println("No task at that index to unmark!");
             return;
         }
-        tasks[index].setIsDone(false);
-        System.out.println("OK, I've marked this task as not done yet:\n  " + tasks[index]);
+        tasks.get(index).setIsDone(false);
+        System.out.println("OK, I've marked this task as not done yet:\n  " + tasks.get(index));
     }
 
     /**
-     * Deletes a task from the list, shifting subsequent tasks left.
+     * Deletes a task from the list, printing a confirmation.
      *
      * @param index The zero-based index of the task to delete.
      */
     public void deleteTask(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= tasks.size()) {
             System.out.println("No task at index " + (index + 1));
             return;
         }
-        System.out.println("Noted. I've removed this task:\n  " + tasks[index]);
-        for (int i = index; i < size - 1; i++) {
-            tasks[i] = tasks[i + 1];
-        }
-        tasks[size - 1] = null;
-        size--;
-        System.out.println("Now you have " + size + " tasks in the list.");
+        System.out.println("Noted. I've removed this task:\n  " + tasks.get(index));
+        tasks.remove(index);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -87,8 +81,8 @@ public class TaskList {
      */
     public void listTasks() {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < size; i++) {
-            System.out.println((i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
 
@@ -99,14 +93,14 @@ public class TaskList {
      */
     public void find(String keyword) {
         System.out.println("Here are the matching tasks in your list:");
-        int index = 1;
-        for (int i = 0; i < size; i++) {
-            if (tasks[i].getDescription().contains(keyword)) {
-                System.out.println(index + "." + tasks[i]);
-                index++;
+        int foundCount = 0;
+        for (Task t : tasks) {
+            if (t.getDescription().contains(keyword)) {
+                foundCount++;
+                System.out.println(foundCount + "." + t);
             }
         }
-        if (index == 1) {
+        if (foundCount == 0) {
             System.out.println("No matching tasks found.");
         }
     }
@@ -118,7 +112,7 @@ public class TaskList {
      * @return The Task at index i.
      */
     public Task get(int i) {
-        return tasks[i];
+        return tasks.get(i);
     }
 
     /**
@@ -127,6 +121,6 @@ public class TaskList {
      * @return The size of the TaskList.
      */
     public int size() {
-        return size;
+        return tasks.size();
     }
 }
