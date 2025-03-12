@@ -6,6 +6,7 @@ public class DeadlineFormatException extends Exception {
      * Constructs a DeadlineFormatException and prints an error message.
      */
     public DeadlineFormatException() {
-        System.out.println("Deadline format should be: deadline <description> /by <time>");
+        System.out.println("Deadline format should be: "
+                + "deadline <description> /by <d/M/yyyy HHmm>");
     }
 }

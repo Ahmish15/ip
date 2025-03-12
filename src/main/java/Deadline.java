@@ -1,36 +1,41 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
- * Represents a Deadline task with a description and a "by" string.
+ * Represents a Deadline task with a description and a "by" date/time.
  */
 public class Deadline extends Task {
-    private String by;
+    private LocalDateTime by;
 
     /**
-     * Constructs a Deadline with the given description and by-string.
+     * Constructs a Deadline with the given description and due date/time.
      *
      * @param description The task description.
-     * @param by The deadline or due date/time as a string.
+     * @param by The deadline as a LocalDateTime.
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
 
     /**
-     * Returns the string specifying the deadline.
+     * Returns the LocalDateTime representing the deadline.
      *
-     * @return The by string.
+     * @return The by date/time.
      */
-    public String getBy() {
+    public LocalDateTime getBy() {
         return by;
     }
 
     /**
-     * Returns a string representation of a Deadline task.
+     * Returns a string representation of a Deadline task,
+     * including a formatted date/time.
      *
      * @return "[D]" + status + description + " (by: ...)"
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("d MMM yyyy, h:mm a");
+        return "[D]" + super.toString() + " (by: " + by.format(outputFormat) + ")";
     }
 }

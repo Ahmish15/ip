@@ -6,6 +6,7 @@ public class EventFormatException extends Exception {
      * Constructs an EventFormatException and prints an error message.
      */
     public EventFormatException() {
-        System.out.println("Event format should be: event <description> /from <start> /to <end>");
+        System.out.println("Event format should be: "
+                + "event <description> /from <d/M/yyyy HHmm> /to <d/M/yyyy HHmm>");
     }
 }
