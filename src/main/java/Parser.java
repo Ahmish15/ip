@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Interprets user commands and lines from the storage file,
@@ -90,9 +91,11 @@ public class Parser {
 
     /**
      * Parses a single line from the storage file into a Task.
+     * Includes a try/catch block to handle invalid date/time formats
+     * without crashing the program.
      *
      * @param line A line from the file, e.g. "T | 0 | read book".
-     * @return The corresponding Task object, or null if unrecognized.
+     * @return The corresponding Task object, or null if unrecognized or invalid.
      */
     public static Task parseTaskLine(String line) {
         String[] parts = line.split("\\|");
@@ -110,21 +113,34 @@ public class Parser {
                 return todo;
             }
             case "D": {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-                LocalDateTime by = LocalDateTime.parse(parts[3], formatter);
-                Deadline d = new Deadline(description, by);
-                d.setIsDone(isDone);
-                return d;
+                // Expecting parts[3] to be date/time in d/M/yyyy HHmm
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+                    LocalDateTime by = LocalDateTime.parse(parts[3], formatter);
+                    Deadline d = new Deadline(description, by);
+                    d.setIsDone(isDone);
+                    return d;
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid date/time format for Deadline: " + parts[3]);
+                    return null;
+                }
             }
             case "E": {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-                LocalDateTime from = LocalDateTime.parse(parts[3], formatter);
-                LocalDateTime to = LocalDateTime.parse(parts[4], formatter);
-                Event e = new Event(description, from, to);
-                e.setIsDone(isDone);
-                return e;
+                // Expecting parts[3], parts[4] to be from/to in d/M/yyyy HHmm
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+                    LocalDateTime from = LocalDateTime.parse(parts[3], formatter);
+                    LocalDateTime to = LocalDateTime.parse(parts[4], formatter);
+                    Event e = new Event(description, from, to);
+                    e.setIsDone(isDone);
+                    return e;
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid date/time format for Event: " + line);
+                    return null;
+                }
             }
             default:
+                // Unrecognized task type
                 return null;
         }
     }
