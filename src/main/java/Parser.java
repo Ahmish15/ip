@@ -1,7 +1,3 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 /**
  * Interprets user commands and lines from the storage file,
  * and performs the necessary actions on the TaskList.
@@ -52,12 +48,10 @@ public class Parser {
                 throw new DeadlineFormatException();
             }
             String description = parts[0].trim();
-            String dateTimeStr = parts[1].trim();
-            if (description.isEmpty() || dateTimeStr.isEmpty()) {
+            String by = parts[1].trim();
+            if (description.isEmpty() || by.isEmpty()) {
                 throw new DeadlineFormatException();
             }
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            LocalDateTime by = LocalDateTime.parse(dateTimeStr, formatter);
             Deadline d = new Deadline(description, by);
             tasks.addTask(d);
         } else if (input.startsWith("event")) {
@@ -69,14 +63,11 @@ public class Parser {
                 throw new EventFormatException();
             }
             String description = parts[0].trim();
-            String fromStr = parts[1].trim();
-            String toStr = parts[2].trim();
-            if (description.isEmpty() || fromStr.isEmpty() || toStr.isEmpty()) {
+            String from = parts[1].trim();
+            String to = parts[2].trim();
+            if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
                 throw new EventFormatException();
             }
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            LocalDateTime from = LocalDateTime.parse(fromStr, formatter);
-            LocalDateTime to = LocalDateTime.parse(toStr, formatter);
             Event e = new Event(description, from, to);
             tasks.addTask(e);
         } else if (input.startsWith("find ")) {
@@ -91,11 +82,10 @@ public class Parser {
 
     /**
      * Parses a single line from the storage file into a Task.
-     * Includes a try/catch block to handle invalid date/time formats
-     * without crashing the program.
+     * (Simple string-based approach for deadlines/events.)
      *
      * @param line A line from the file, e.g. "T | 0 | read book".
-     * @return The corresponding Task object, or null if unrecognized or invalid.
+     * @return The corresponding Task object, or null if unrecognized.
      */
     public static Task parseTaskLine(String line) {
         String[] parts = line.split("\\|");
@@ -107,40 +97,22 @@ public class Parser {
         String description = parts[2];
 
         switch (type) {
-            case "T": {
+            case "T":
                 Todo todo = new Todo(description);
                 todo.setIsDone(isDone);
                 return todo;
-            }
-            case "D": {
-                // Expecting parts[3] to be date/time in d/M/yyyy HHmm
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-                    LocalDateTime by = LocalDateTime.parse(parts[3], formatter);
-                    Deadline d = new Deadline(description, by);
-                    d.setIsDone(isDone);
-                    return d;
-                } catch (DateTimeParseException e) {
-                    System.out.println("Invalid date/time format for Deadline: " + parts[3]);
-                    return null;
-                }
-            }
-            case "E": {
-                // Expecting parts[3], parts[4] to be from/to in d/M/yyyy HHmm
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-                    LocalDateTime from = LocalDateTime.parse(parts[3], formatter);
-                    LocalDateTime to = LocalDateTime.parse(parts[4], formatter);
-                    Event e = new Event(description, from, to);
-                    e.setIsDone(isDone);
-                    return e;
-                } catch (DateTimeParseException e) {
-                    System.out.println("Invalid date/time format for Event: " + line);
-                    return null;
-                }
-            }
+            case "D":
+                String by = parts[3];
+                Deadline d = new Deadline(description, by);
+                d.setIsDone(isDone);
+                return d;
+            case "E":
+                String from = parts[3];
+                String to = parts[4];
+                Event e = new Event(description, from, to);
+                e.setIsDone(isDone);
+                return e;
             default:
-                // Unrecognized task type
                 return null;
         }
     }
@@ -157,15 +129,10 @@ public class Parser {
             return "T | " + doneBit + " | " + t.getDescription();
         } else if (t instanceof Deadline) {
             Deadline d = (Deadline) t;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            String dateTimeStr = d.getBy().format(formatter);
-            return "D | " + doneBit + " | " + d.getDescription() + " | " + dateTimeStr;
+            return "D | " + doneBit + " | " + d.getDescription() + " | " + d.getBy();
         } else if (t instanceof Event) {
             Event e = (Event) t;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-            String fromStr = e.getFrom().format(formatter);
-            String toStr = e.getTo().format(formatter);
-            return "E | " + doneBit + " | " + e.getDescription() + " | " + fromStr + " | " + toStr;
+            return "E | " + doneBit + " | " + e.getDescription() + " | " + e.getFrom() + " | " + e.getTo();
         } else {
             return "T | " + doneBit + " | " + t.getDescription();
         }

@@ -1,55 +1,48 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 /**
- * Represents an Event task with a description, a "from" date/time, and a "to" date/time.
+ * Represents an Event task with a description, a "from" string, and a "to" string.
  */
 public class Event extends Task {
-    private LocalDateTime from;
-    private LocalDateTime to;
+    private String from;
+    private String to;
 
     /**
-     * Constructs an Event with the given description, from-date/time, and to-date/time.
+     * Constructs an Event with the given description, from-string, and to-string.
      *
      * @param description The task description.
-     * @param from The start time/place as a LocalDateTime.
-     * @param to The end time/place as a LocalDateTime.
+     * @param from The start time/place.
+     * @param to The end time/place.
      */
-    public Event(String description, LocalDateTime from, LocalDateTime to) {
+    public Event(String description, String from, String to) {
         super(description);
         this.from = from;
         this.to = to;
     }
 
     /**
-     * Returns the start date/time of the event.
+     * Returns the "from" string.
      *
-     * @return The from date/time.
+     * @return The from string.
      */
-    public LocalDateTime getFrom() {
+    public String getFrom() {
         return from;
     }
 
     /**
-     * Returns the end date/time of the event.
+     * Returns the "to" string.
      *
-     * @return The to date/time.
+     * @return The to string.
      */
-    public LocalDateTime getTo() {
+    public String getTo() {
         return to;
     }
 
     /**
-     * Returns a string representation of an Event task,
-     * including formatted start and end date/time.
+     * Returns a string representation of an Event task.
      *
      * @return "[E]" + status + description + " (from: ... to: ...)"
      */
     @Override
     public String toString() {
-        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("d MMM yyyy, h:mm a");
-        return "[E]" + super.toString()
-                + " (from: " + from.format(outputFormat)
-                + " to: " + to.format(outputFormat) + ")";
+        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
     }
 }
